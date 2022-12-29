@@ -18,12 +18,15 @@
 
 package com.github.martijn_heil.extrablokjes;
 
+import com.github.martijn_heil.extrablokjes.listeners.ExtrablokjesListener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Extrablokjes extends JavaPlugin {
 	@Override
 	public void onEnable() {
+		this.saveDefaultConfig();
 
+		this.getServer().getPluginManager().registerEvents(new ExtrablokjesListener(), this);
 	}
 
 	@Override
