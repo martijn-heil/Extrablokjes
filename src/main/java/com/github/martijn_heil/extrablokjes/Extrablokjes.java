@@ -19,18 +19,26 @@
 package com.github.martijn_heil.extrablokjes;
 
 import com.github.martijn_heil.extrablokjes.listeners.ExtrablokjesListener;
+import com.github.martijn_heil.extrablokjes.storage.EmulatedNoteBlockRepositoryProvider;
+import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Extrablokjes extends JavaPlugin {
+	public static Extrablokjes instance;
+	private EmulatedNoteBlockRepositoryProvider emulatedNoteBlockRepositoryProvider;
+
 	@Override
 	public void onEnable() {
-		this.saveDefaultConfig();
+		instance = this;
 
-		this.getServer().getPluginManager().registerEvents(new ExtrablokjesListener(), this);
+		this.saveDefaultConfig();
+		this.getServer().getPluginManager().registerEvents(new ExtrablokjesListener(emulatedNoteBlockRepositoryProvider), this);
 	}
 
 	@Override
 	public void onDisable() {
-
+		for (World world : this.getServer().getWorlds()) {
+			emulatedNoteBlockRepositoryProvider.getNoteBlockRepository(world).saveAllDirty();
+		}
 	}
 }
