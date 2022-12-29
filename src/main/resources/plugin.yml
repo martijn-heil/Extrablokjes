@@ -1,0 +1,5 @@
+name: Extrablokjes
+version: @version@
+authors: [Ninjoh, darwj]
+main: com.github.martijn_heil.extrablokjes.Extrablokjes
+api-version: 1.18
