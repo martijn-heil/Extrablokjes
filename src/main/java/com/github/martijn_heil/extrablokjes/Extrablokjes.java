@@ -20,8 +20,12 @@ package com.github.martijn_heil.extrablokjes;
 
 import com.github.martijn_heil.extrablokjes.listeners.ExtrablokjesListener;
 import com.github.martijn_heil.extrablokjes.storage.EmulatedNoteBlockRepositoryProvider;
+import com.github.martijn_heil.extrablokjes.storage.SimpleEmulatedNoteBlockRepositoryProvider;
+import com.github.martijn_heil.extrablokjes.storage.yaml.YamlEmulatedNoteBlockRepository;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.File;
 
 public class Extrablokjes extends JavaPlugin {
 	public static Extrablokjes instance;
@@ -32,13 +36,25 @@ public class Extrablokjes extends JavaPlugin {
 		instance = this;
 
 		this.saveDefaultConfig();
+
+		SimpleEmulatedNoteBlockRepositoryProvider simpleProvider = new SimpleEmulatedNoteBlockRepositoryProvider(
+				this.getServer(),
+				world -> new YamlEmulatedNoteBlockRepository((new File(this.getDataFolder(), world.getUID() + ".yml")))
+		);
+		this.emulatedNoteBlockRepositoryProvider = simpleProvider;
+
+		this.getServer().getPluginManager().registerEvents(new SimpleEmulatedNoteBlockRepositoryProvider.Listener(simpleProvider), this);
 		this.getServer().getPluginManager().registerEvents(new ExtrablokjesListener(emulatedNoteBlockRepositoryProvider), this);
 	}
 
 	@Override
 	public void onDisable() {
 		for (World world : this.getServer().getWorlds()) {
-			emulatedNoteBlockRepositoryProvider.getNoteBlockRepository(world).saveAllDirty();
+			try {
+				emulatedNoteBlockRepositoryProvider.getNoteBlockRepository(world).saveAllDirty();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
 		}
 	}
 }
