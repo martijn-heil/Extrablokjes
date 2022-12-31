@@ -18,7 +18,7 @@
 
 package com.github.martijn_heil.extrablokjes;
 
-import com.github.martijn_heil.extrablokjes.listeners.ExtrablokjesListener;
+import com.github.martijn_heil.extrablokjes.listeners.EmulatedNoteblockListener;
 import com.github.martijn_heil.extrablokjes.storage.EmulatedNoteBlockRepositoryProvider;
 import com.github.martijn_heil.extrablokjes.storage.SimpleEmulatedNoteBlockRepositoryProvider;
 import com.github.martijn_heil.extrablokjes.storage.yaml.YamlEmulatedNoteBlockRepository;
@@ -44,7 +44,7 @@ public class Extrablokjes extends JavaPlugin {
 		this.emulatedNoteBlockRepositoryProvider = simpleProvider;
 
 		this.getServer().getPluginManager().registerEvents(new SimpleEmulatedNoteBlockRepositoryProvider.Listener(simpleProvider), this);
-		this.getServer().getPluginManager().registerEvents(new ExtrablokjesListener(emulatedNoteBlockRepositoryProvider), this);
+		this.getServer().getPluginManager().registerEvents(new EmulatedNoteblockListener(emulatedNoteBlockRepositoryProvider), this);
 	}
 
 	@Override
